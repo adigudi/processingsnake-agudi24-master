@@ -1,4 +1,4 @@
-
+int score;
 // 1. Follow the recipe instructions inside the Segment class.
 
 // This class will be used to represent each part of the moving snake.
@@ -18,13 +18,13 @@ Segment(int x, int y){
 int getX(){
   return this.x;
 }
-void setX(){
+void setX(int x){
   this.x = x;
 }
 int getY(){
  return this.y; 
 }
-void setY(){
+void setY(int y){
   this.y = y;
 }
   // 4. Add getter and setter methods for both the x and y member variables.
@@ -83,6 +83,8 @@ void draw() {
   move();
   collision();
   checkBoundaries();
+  textSize(20);
+  text("Score:" + score, 50, 50);
 }
 
 
@@ -184,6 +186,7 @@ void collision() {
     if(head.x == foodX &&  head.y == foodY){
      foodX = ((int)random(50)*10);
      foodY = ((int)random(50)*10);
+     score++;
     }
 }
 
@@ -196,21 +199,35 @@ void collision() {
  **/
 
 //  1. Create and initialize an ArrayList of Segments. (This will be your snake tail!)
-ArrayList array = new ArrayList(10);
+ArrayList<Segment> array = new ArrayList<Segment>();
 
 // 2. Complete the missing parts of the manageTail method below and call it in the draw method.
 
 void manageTail() {
-
+checkTailCollision();
   //Call the drawTail and checkTailCollision methods.
 drawTail();
   // Add a new Segment to your ArrayList that has the same X and Y as the head of your snake.
+  array.add(head);
   // While the tail size is greater than your food, remove the first Segment in your tail.
+while(score < array.size()){
+  array.remove(0);
+}
 }
 
 void drawTail() {
     // Draw a 10 by 10 rectangle for each Segment in your snake ArrayList.
+    for(int i=0; i >10; i++){
+      for(array.get(i)){
+    rect(10, 10, 10, 10);
+    }
 }
+}
+
+
+
+
+
 
 
 // 3. Complete the missing parts of the bodyCollision method below.
@@ -218,8 +235,14 @@ void drawTail() {
 void checkTailCollision() {
 
   // If your head has the same location as one of your segments...
+  for(int i=0; i > array.size(); i++){
+  if(head.getX() == array.get(i).getX()){
+  score=0;
+  }
+  }
+}
+
 
   // reset your food variable
 
   //Call this method at the begining of your manageTail method.
-}
