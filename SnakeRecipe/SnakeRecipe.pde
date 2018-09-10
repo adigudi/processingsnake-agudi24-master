@@ -5,53 +5,50 @@ int score;
 
 
 class Segment {
-int x;
-int y;
+  int x;
+  int y;
 
   //2. Create x and y member variables to hold the location of each segment.
 
   // 3. Add a constructor with parameters to initialize each variable.
-Segment(int x, int y){
-  this.x = x;
-  this.y = y;
-}
-int getX(){
-  return this.x;
-}
-void setX(int x){
-  this.x = x;
-}
-int getY(){
- return this.y; 
-}
-void setY(int y){
-  this.y = y;
-}
+  Segment(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+  int getX() {
+    return this.x;
+  }
+  void setX(int x) {
+    this.x = x;
+  }
+  int getY() {
+    return this.y;
+  }
+  void setY(int y) {
+    this.y = y;
+  }
   // 4. Add getter and setter methods for both the x and y member variables.
 
 
 
-// 5. Create (but do not initialize) a Segment variable to hold the head of the Snake
+  // 5. Create (but do not initialize) a Segment variable to hold the head of the Snake
 
 
 
-// 6. Create and initialize String to hold the direction of your snake e.g. "up"
+  // 6. Create and initialize String to hold the direction of your snake e.g. "up"
 
 
 
-// 7. Create and initialize a variable to hold how many pieces of food the snake has eaten.
-// give it a value of 1 to start.
+  // 7. Create and initialize a variable to hold how many pieces of food the snake has eaten.
+  // give it a value of 1 to start.
 
-int food = 1;
+  int food = 1;
 
-// 8. Create and initialize foodX and foodY variables to hold the location of the food.
+  // 8. Create and initialize foodX and foodY variables to hold the location of the food.
 
-// (Hint: use the random method to set both the x and y to random locations within the screen size (500 by 500).)
+  // (Hint: use the random method to set both the x and y to random locations within the screen size (500 by 500).)
 
-//int foodX = ((int)random(50)*10);
-
-
-
+  //int foodX = ((int)random(50)*10);
 }
 Segment head;
 int foodX = ((int)random(50)*10);
@@ -63,9 +60,9 @@ void setup() {
 
   size(500, 500);
 
-head = new Segment(100, 100);
+  head = new Segment(100, 100);
   // 10. initialize your head to a new segment.
-  
+
 
   // 11. Use the frameRate(int rate) method to set the rate to 20.
   frameRate(20);
@@ -83,6 +80,8 @@ void draw() {
   move();
   collision();
   checkBoundaries();
+  drawTail();
+  manageTail();
   textSize(20);
   text("Score:" + score, 50, 50);
 }
@@ -98,7 +97,7 @@ void drawFood() {
 //14. Draw the snake head (use a 10 by 10 rectangle)
 
 void drawSnake() {
-  fill(0, 240, 0);
+  fill(255, 0, 0);
   rect(head.x, head.y, 10, 10);
 
   //test your code
@@ -111,7 +110,7 @@ void move() {
 
   // 16. Using a switch statement, make your snake move by 10 pixels in the correct direction.
   //This is an incomplete switch statement:
-  
+
   switch(direction) {
   case "up":
     head.y-=10;
@@ -126,7 +125,7 @@ void move() {
     head.x+=10;
     break;
   }
-  
+
 
 
   // 17. Call the checkBoundaries method to make sure the snake doesn't go off the screen.
@@ -136,20 +135,18 @@ void move() {
 // 18. Complete the keyPressed method below. Use if statements to set your direction variable depending on what key is pressed.
 
 void keyPressed() {
-   if(keyCode == UP){
-     direction = "up";
-   }
-   if(keyCode == DOWN){
-     direction = "down";
-   }
-   if(keyCode == LEFT){
-     direction = "left";
-   }
-   if(keyCode == RIGHT){
-     direction = "right";
-   }
-   
-     
+  if (keyCode == UP) {
+    direction = "up";
+  }
+  if (keyCode == DOWN) {
+    direction = "down";
+  }
+  if (keyCode == LEFT) {
+    direction = "left";
+  }
+  if (keyCode == RIGHT) {
+    direction = "right";
+  }
 }
 
 
@@ -157,16 +154,16 @@ void keyPressed() {
 // 19. check if your head is out of bounds (teleport your snake to the other side).
 
 void checkBoundaries() {
-  if(head.x < 0){
+  if (head.x < 0) {
     head.x = 500;
   }
-  if(head.x > 500){
+  if (head.x > 500) {
     head.x = 0;
   }
-  if(head.y < 0){
+  if (head.y < 0) {
     head.y = 500;
   }
-  if(head.y > 500){
+  if (head.y > 500) {
     head.y = 0;
   }
 }
@@ -182,12 +179,13 @@ void checkBoundaries() {
 void collision() {
 
   // If the segment is colliding with a piece of food...
-     // Increase the amount of food eaten and set foodX and foodY to new random locations.
-    if(head.x == foodX &&  head.y == foodY){
-     foodX = ((int)random(50)*10);
-     foodY = ((int)random(50)*10);
-     score++;
-    }
+  // Increase the amount of food eaten and set foodX and foodY to new random locations.
+  if (head.x == foodX &&  head.y == foodY) {
+    foodX = ((int)random(50)*10);
+    foodY = ((int)random(50)*10);
+    score++;
+    println("Hit");
+  }
 }
 
 
@@ -204,25 +202,27 @@ ArrayList<Segment> array = new ArrayList<Segment>();
 // 2. Complete the missing parts of the manageTail method below and call it in the draw method.
 
 void manageTail() {
-checkTailCollision();
+  checkTailCollision();
   //Call the drawTail and checkTailCollision methods.
-drawTail();
+  drawTail();
   // Add a new Segment to your ArrayList that has the same X and Y as the head of your snake.
-  array.add(head);
+  Segment seg;
+  seg = new Segment(head.x, head.y);
+  array.add(seg);
+  println(array.size());
   // While the tail size is greater than your food, remove the first Segment in your tail.
-while(score < array.size()){
-  array.remove(0);
-}
+  while (score < array.size()) {
+    array.remove(0);
+  }
 }
 
 void drawTail() {
-    // Draw a 10 by 10 rectangle for each Segment in your snake ArrayList.
-    for(int i=0; i >10; i++){
-      for(array.get(i)){
-    rect(10, 10, 10, 10);
-    }
+  // Draw a 10 by 10 rectangle for each Segment in your snake ArrayList.
+  for (Segment seg: array) {
+    rect(seg.x, seg.y, 10, 10);
+  }
 }
-}
+
 
 
 
@@ -235,14 +235,14 @@ void drawTail() {
 void checkTailCollision() {
 
   // If your head has the same location as one of your segments...
-  for(int i=0; i > array.size(); i++){
-  if(head.getX() == array.get(i).getX()){
-  score=0;
-  }
+  for (int i=0; i > array.size(); i++) {
+    if (head.getX() == array.get(i).getX()) {
+      score=0;
+    }
   }
 }
 
 
-  // reset your food variable
+// reset your food variable
 
-  //Call this method at the begining of your manageTail method.
+//Call this method at the begining of your manageTail method.
